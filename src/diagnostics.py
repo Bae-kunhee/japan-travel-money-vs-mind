@@ -84,7 +84,7 @@ def summarize(m, label):
 for bw in sorted({2, bw0, 6, 12, 24}):
     summarize(mod.fit(cov_type="kernel", kernel="bartlett", bandwidth=bw),
               f"Driscoll-Kraay, bandwidth {bw}" + (" (본 분석)" if bw == bw0 else ""))
-summarize(mod.fit(cov_type="clustered", cluster_entity=True), "국가 군집 (군집 5개, 참고용)")
+summarize(mod.fit(cov_type="clustered", cluster_entity=True), "국가 군집 (linearmodels 기본 보정, 참고용)")
 summarize(mod.fit(cov_type="clustered", cluster_time=True), "월 군집")
 se = pd.DataFrame(se_rows)
 dk = se[se["cov"].str.startswith("Driscoll")]
@@ -131,7 +131,7 @@ INF = {"cr1": {"theta": th0, "se": se_cr1, "t": t0, "p_t4": p_t4},
        "wild_cluster_bootstrap_webb": {"p": p_wcr, "draws": len(ts)},
        "worst_case_theta_cr1_t4": th_hi,
        "worst_case_breakeven_pct": float(100 * (1 - np.exp(-ga_main / th_hi))),
-       "worst_case_ratio": float(ga_main / (th_hi * np.log(0.9)))}
+       "worst_case_ratio": float(abs(ga_main / (th_hi * np.log(0.9))))}
 
 # ---------------------------------------------------------------- E. placebo boycott windows (Japan, 8 months, before 2019-07)
 pl = []
@@ -161,7 +161,7 @@ for label, hi in [("adj_2019H2", ym(2019, 12)), ("adj_to_2020-02", ym(2020, 2))]
         S2.loc[m_, "ln_v"] -= a_
     th2, ga2, *_ = theta_gamma(S2, K)
     INF[label] = {"theta": th2, "gamma": ga2, "boycott_pct": 100 * (np.exp(ga2) - 1),
-                  "breakeven_pct": 100 * (1 - np.exp(-ga2 / th2)), "ratio": ga2 / (th2 * np.log(0.9))}
+                  "breakeven_pct": 100 * (1 - np.exp(-ga2 / th2)), "ratio": abs(ga2 / (th2 * np.log(0.9)))}
 json.dump(INF, open(RESULTS / "inference_checks.json", "w"), indent=1, default=float)
 
 # ---------------------------------------------------------------- appendix markdown
