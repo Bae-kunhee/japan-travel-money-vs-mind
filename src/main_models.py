@@ -11,7 +11,7 @@ import statsmodels.api as sm
 from statsmodels.tsa.stattools import adfuller, kpss, coint
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
-from config import RESULTS, COUNTRIES
+from config import RESULTS, COUNTRIES, T0, T1
 from panel_models import (load_full, load_panel, open_sample, japan_sample, lag_cols,
                           m1_fit, m2_fit, dk_cov, sum_vector)
 
@@ -87,7 +87,21 @@ a = sum_vector(plX.columns, [f"ln_fx_f{k}" for k in range(1, 4)])
 rob["placebo_leads"] = {"lead_sum": float(a @ plfit.params.values), "se": float(np.sqrt(a @ plV @ a)),
                         "theta_lags": pl["theta"], "theta_lags_se": pl["se"]}
 rob["drop_TH_PH_2025"] = m2_fit(S[~(S.country.isin(["TH", "PH"]) & (S.year == 2025))], K)[0]
+rob["drop_JP_2025H2"] = m2_fit(S[~((S.country == "JP") & (S.year == 2025) & (S.month >= 7))], K)[0]
+# Japan-specific elasticity: add Japan x (sum of FX lags); theta_JP = pooled + extra
+lagsum = S[lag_cols(K)].sum(axis=1)
+_o, _f, _X, _V = m2_fit(S, K, extra=((S.country == "JP") * lagsum).rename("jp_fx").to_frame())
+_i = list(_X.columns).index("jp_fx")
+rob["japan_specific_theta"] = {"theta_others": _o["theta"], "jp_extra": float(_f.params["jp_fx"]),
+                               "jp_extra_se": float(np.sqrt(_V[_i, _i])),
+                               "theta_JP": float(_o["theta"] + _f.params["jp_fx"])}
 R["robustness"] = rob
+
+# pre-COVID only (2016-01..2020-02): is the Japan-only inflation there even without revenge travel?
+Jpre = J[J.t <= 61]
+m1pre, _ = m1_fit(0, Jpre)
+R["pre_covid"] = {"model1_K0": {"theta": float(m1pre.params["ln_fx"]), "se": float(m1pre.bse["ln_fx"]), "n": int(m1pre.nobs)},
+                  "model2_K10": m2_fit(S[S.t <= 61], K, use_event=False)[0]}
 
 # ============================================================== 4. decomposition for Japan (vs 2018)
 params = fit_main.params
@@ -127,6 +141,13 @@ def decompose(years):
     naive = float((Pp[lc].values @ b1).mean() - (B[lc].values @ b1).mean())
     dec["naive_fx_log"] = naive
     dec["naive_fx_share"] = naive / total
+    # report version: cumulative elasticity x change in the lag-window average yen
+    # (individual lag betas are collinear and unstable; theta is the stable quantity)
+    dfx = lagm(Pp) - lagm(B)
+    dec["fx_theta_log"] = float(R["model2_event"]["theta"] * dfx)
+    dec["fx_theta_share"] = dec["fx_theta_log"] / total
+    dec["japan_specific_theta_log"] = total - dec["fx_theta_log"] - dec["common_log"]
+    dec["naive_theta_log"] = float(R["model1_sameK"]["theta"] * dfx)
     return dec
 
 
@@ -136,11 +157,12 @@ R["model2_cum_betas"] = list(np.cumsum([fit_main.params[c] for c in lc]))
 R["model1_cum_betas_sameK"] = list(np.cumsum([m1b.params[c] for c in lc]))
 
 # ============================================================== 5. year-on-year (seasonal difference) panel
-Y = P.sort_values(["country", "t"]).copy()
+Y = D.sort_values(["country", "t"]).copy()           # difference on the full panel (2015 data usable)
 Y["d_lnv"] = Y.ln_v - Y.groupby("country").ln_v.shift(12)
 for c in ["ln_fx"] + [f"ln_fx_l{k}" for k in range(1, 13)]:
     Y["d_" + c] = Y[c] - Y.groupby("country")[c].shift(12)
 Y["e_lag12"] = Y.groupby("country").event.shift(12)
+Y = Y[(Y.t >= T0) & (Y.t <= T1)]
 ok_pre = (Y.t <= 61)                                         # both t and t-12 pre-pandemic
 ok_post = (Y.event >= 12) & (Y.e_lag12 >= 6)                 # both well past reopening
 Yd = Y[(ok_pre | ok_post) & Y.d_lnv.notna()].dropna(subset=["d_ln_fx_l" + str(K)]).copy()

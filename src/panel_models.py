@@ -79,9 +79,11 @@ def design(df, K, event_col="event", use_event=True, extra=None, trends=False, l
     parts.append(tt.iloc[:, 1:])
     if use_event:
         e = df[event_col]
-        # bins 0..17 and 18+; -1 = pre-pandemic reference. With year-month FE the 18+ level is
-        # absorbed (collinear) and is pruned below, i.e. normalised to the long-run level.
-        eb = np.where(e.isna(), -1, np.minimum(e, 18))
+        # bins 0..17 and 18+; -1 = pre-pandemic. e_-1 is dropped here; with year-month FE the 18+ bin
+        # is also collinear (post-reopening is a function of t) and is pruned below. So the event-time
+        # coefficients are measured relative to the long-run (18+) level, and the pre-pandemic vs 18+
+        # difference is absorbed by lambda_t.
+        eb = np.where(e.isna(), -1, np.minimum(e, 18)).astype(int)
         ed = pd.get_dummies(pd.Series(eb, index=df.index), prefix="e", dtype=float)
         ed = ed.drop(columns=["e_-1"], errors="ignore")
         parts.append(ed)

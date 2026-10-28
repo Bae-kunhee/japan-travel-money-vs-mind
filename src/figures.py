@@ -77,10 +77,12 @@ rows = [("모형 1: 일본 단독 (통념)", R["model1"]["theta"], R["model1"]["
 rlab = {"drop_VN": "베트남 제외", "drop_TH": "태국 제외", "drop_PH": "필리핀 제외", "drop_TW": "대만 제외",
         "alt_reopen": "재개 시점 다른 기준", "drop_transition_calendarFE": "회복 전환기 제외",
         "country_trends": "나라별 추세 추가", "drop_first3": "재개 직후 3개월 제외",
-        "drop_TH_PH_2025": "태국·필리핀 2025년 제외", "yoy_panel": "전년동월비 모형"}
+        "drop_TH_PH_2025": "태국·필리핀 2025년 제외", "drop_JP_2025H2": "일본 2025년 하반기 제외",
+        "yoy_panel": "전년동월비 모형"}
 for k, lab in rlab.items():
     rows.append(("강건성 · " + lab, R["robustness"][k]["theta"], R["robustness"][k]["se"], "rob"))
-fig, ax = plt.subplots(figsize=(8.6, 6.0))
+rows.append(("강건성 · 코로나 이전 기간만", R["pre_covid"]["model2_K10"]["theta"], R["pre_covid"]["model2_K10"]["se"], "rob"))
+fig, ax = plt.subplots(figsize=(8.6, 6.6))
 ys = np.arange(len(rows))[::-1].astype(float)
 ys[:3] += 0.6
 for y, (lab, th, se, kind) in zip(ys, rows):
@@ -96,20 +98,19 @@ ax.axvline(0, color=INK2, lw=0.9)
 ax.set_xlim(-2, 52)
 ax.set_xlabel("엔화(해당 통화)가 10% 싸질 때 방문자 수 변화 (%), 점 = 추정치, 선 = 95% 신뢰구간")
 style(ax, "x")
-titles(fig, "보복 여행을 걷어내면 엔저 효과는 통념의 절반 이하로 줄어든다",
-       "누적 환율 탄력성을 \"통화 10% 하락 시 방문자 증가율\"로 환산. 시차 0~10개월, Driscoll-Kraay 표준오차(모형 1은 Newey-West)",
+titles(fig, "공통 수요를 걷어내면 엔저 효과는 통념의 절반 이하로 줄어든다",
+       "비교국과 공통인 해외여행 수요(코로나 전 여행 붐, 코로나 후 보복 여행)를 통제. 시차 0~10개월, Driscoll-Kraay 표준오차(모형 1은 Newey-West)",
        ys=0.925)
-fig.subplots_adjust(top=0.87, bottom=0.1, left=0.35, right=0.97)
+fig.subplots_adjust(top=0.88, bottom=0.09, left=0.35, right=0.97)
 fig.savefig(FIGURES / "fig2_elasticity_comparison.png", dpi=200); plt.close(fig)
 
 # ------------------------------------------------------------------ 3. decomposition waterfall
 dec = R["decomposition"]
-dfx = np.log(1 + dec["yen_change_pct_lagwindow"] / 100)
-fx = R["model2_event"]["theta"] * dfx * 100          # theta x (lag-window FX change): stable vs single betas
+fx = dec["fx_theta_log"] * 100          # theta x (lag-window FX change): stable vs single betas
 common = dec["common_log"] * 100
 total = dec["total_log"] * 100
-jp = total - fx - common
-naive = R["model1_sameK"]["theta"] * dfx * 100
+jp = dec["japan_specific_theta_log"] * 100
+naive = dec["naive_theta_log"] * 100
 steps = [("공통 요인\n(보복 여행·해외여행\n수요 전반)", common), ("엔저", fx), ("일본 고유 요인", jp)]
 fig, ax = plt.subplots(figsize=(8.6, 4.6))
 run = 0.0
@@ -143,7 +144,7 @@ for lab, g, be, col in [("불매운동 평균 (2019.7~2020.2)", MV["main"]["boyc
                         ("불매운동 정점 (2019.10~12)", MV["boycott_peak"]["gamma"], MV["boycott_peak"]["breakeven"]["fall_pct"], INK2)]:
     y = -100 * g
     ax.axhline(y, color=col, lw=1.2, ls=(0, (4, 3)))
-    ax.text(14, y + 3, f"{lab}: −{y:.0f}", ha="left", va="bottom", fontsize=9.5, color=INK)
+    ax.text(14, y + 3, f"{lab} 효과 크기: {y:.0f}", ha="left", va="bottom", fontsize=9.5, color=INK)
     ax.plot([be, be], [0, y], color=col, lw=1.0, ls=":")
     ax.scatter([be], [y], s=60, color=col, zorder=4, edgecolor="#fcfcfb", lw=1.5)
     ax.text(be + 1.2, 8 if col == ORANGE else 22, f"{be:.0f}%", color=col, fontsize=10.5, weight="bold")
@@ -151,7 +152,7 @@ ax.set_xlim(0, 90); ax.set_ylim(0, 200)
 ax.set_xlabel("엔화 하락 폭 (%, 2018년 대비)"); ax.set_ylabel("엔저로 늘어나는 방일 수요 (로그 차이 × 100)")
 style(ax)
 titles(fig, f"불매운동 하나를 상쇄하려면 엔화가 약 {round(MV['main']['breakeven']['fall_pct'], -1):.0f}% 떨어져야 한다",
-       f"파란 선 = 엔저 효과(본 분석 탄력성 {th:.2f}), 띠 = 95% 신뢰구간. 점선과 만나는 지점이 \"돈이 마음을 이기는\" 엔화 하락 폭",
+       f"파란 선 = 엔저 효과(본 분석 탄력성 {th:.2f}), 띠 = 95% 신뢰구간. 점선(불매 효과 크기)과 만나는 지점이 \"돈이 마음을 이기는\" 엔화 하락 폭",
        "주: 회색 구간 밖은 관측 범위를 벗어난 외삽이므로 예측이 아니라 크기 비교를 위한 환산값이다")
 fig.subplots_adjust(top=0.85, bottom=0.15, left=0.09, right=0.97)
 fig.savefig(FIGURES / "fig4_breakeven.png", dpi=200); plt.close(fig)
@@ -199,9 +200,9 @@ ax.tick_params(axis="x", colors=INK)
 ax.set_xlim(-0.5, 4.9)
 ax.set_ylabel("방문자 수 차이 (%), 기준 구간 대비")
 style(ax)
-titles(fig, "5%를 넘는 엔저에서는 추가 효과가 둔화되는 신호가 보인다",
+titles(fig, "엔저 폭별 효과는 일정 탄력성 가정과 통계적으로 구분되지 않는다",
        "이슈 없는 기간, 통화 가치의 10개월 평균을 자국 2018년 수준과 비교한 구간별 효과. 점 = 추정치, 선 = 95% 신뢰구간",
-       "주: '5% 이상 싸짐' 구간은 일본 2024~25년 25개월에서만 관측되어 해석에 주의가 필요하다")
+       "주: '5% 이상 싸짐' 구간은 일본에서만, 2016년 1월과 2023년 9월~2025년 8월 25개월 관측. 사실상 일본 그 시기 더미라 다른 요인과 구분되지 않는다")
 fig.subplots_adjust(top=0.85, bottom=0.2, left=0.1, right=0.93)
 fig.savefig(FIGURES / "fig6_yen_tiers.png", dpi=200); plt.close(fig)
 

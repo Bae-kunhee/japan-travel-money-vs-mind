@@ -6,7 +6,11 @@ For each destination: share of all Korean departures (법무부・KTO total) in 
   did = dH2 - dH1                            trend-adjusted share shift (%p)
   abs_did = (V19H2 - V18H2) - (V19H1 - V18H1)  trend-adjusted change in visitors (people)
 Destinations with any missing month in 2018-2019 are dropped.
+The sum of gains is an upper bound on diversion; net change elsewhere and the change in all
+departures are saved in results/share_shift_summary.json.
 """
+import json
+
 import numpy as np
 import pandas as pd
 import openpyxl
@@ -49,11 +53,20 @@ o["abs_did"] = (o.v19H2 - o.v18H2) - (o.v19H1 - o.v18H1)
 o = o.dropna().reset_index().sort_values("did", ascending=False)
 o[["sheet", "dest", "share18H2", "share19H2", "dH2", "dH1", "did", "abs_did", "v18H2"]].to_csv(OUT, index=False)
 
+# all departures, same trend-adjusted half-year difference
+T = D.drop_duplicates(["year", "month"]).groupby(["year", "h"]).tot.sum()
+total_did = float((T[(2019, "H2")] - T[(2018, "H2")]) - (T[(2019, "H1")] - T[(2018, "H1")]))
 jp = o.loc[o.dest == "일본", "abs_did"].item()
 gain = o.loc[(o.dest != "일본") & (o.abs_did > 0), "abs_did"].sum()
 four = o.loc[o.dest.isin(["베트남", "필리핀", "대만", "태국"]), "abs_did"].sum()
 print(f"Japan trend-adjusted loss: {jp:,.0f}")
 print(f"gains elsewhere (all destinations with a gain): {gain:,.0f}  = {100 * gain / -jp:.0f}% of Japan's loss")
 print(f"  of which VN/PH/TW/TH: {four:,.0f}")
+net = o.loc[o.dest != "일본", "abs_did"].sum()
+print(f"net change at all other listed destinations: {net:,.0f} ({100 * net / -jp:.0f}% of Japan's loss)")
+print(f"all Korean departures, trend-adjusted: {total_did:,.0f}")
+json.dump({"japan_loss": jp, "gains_elsewhere": gain, "gains_share": gain / -jp, "gains_4_asia": four,
+           "net_other_destinations": net, "net_share": net / -jp, "all_departures_did": total_did},
+          open(RESULTS / "share_shift_summary.json", "w"), indent=1, default=float)
 print(o[o.v18H2 > 100000][["dest", "did", "abs_did"]].round(2).to_string(index=False))
 print("wrote", OUT)

@@ -34,6 +34,9 @@ ok = draws[:, 0] < 0
 dd = -draws[ok, 1] / draws[ok, 0]
 R["main"]["breakeven_sim_ci_fall_pct"] = [float(100 * (1 - np.exp(np.percentile(dd, q)))) for q in (97.5, 2.5)]
 R["main"]["share_draws_theta_negative"] = float(ok.mean())
+# headline ratio: boycott effect / effect of a 10% yen fall (same draws)
+ratio = draws[ok, 1] / (draws[ok, 0] * np.log(0.9))
+R["main"]["ratio_sim_ci"] = [float(np.percentile(ratio, q)) for q in (2.5, 97.5)]
 
 # ------------------------------------------------------------------ 2. boycott month by month (peak vs average)
 Sm = S.copy()
@@ -57,7 +60,10 @@ R["boycott_peak"] = {"gamma": float(pk), "pct": float(100 * (np.exp(pk) - 1)),
 for label, end in [("fukushima_4m", ym(2023, 12)), ("fukushima_6m", ym(2024, 2))]:
     fk = ((S.country == "JP") & (S.t >= ym(2023, 9)) & (S.t <= end)).astype(float).rename("fukushima")
     _, gaf, _, vgf, *_ = theta_gamma(S, K, extra=fk.to_frame(), gamma_col="fukushima")
-    R[label] = {"gamma": gaf, "se": np.sqrt(vgf), "pct": 100 * (np.exp(gaf) - 1)}
+    s_ = np.sqrt(vgf)
+    R[label] = {"gamma": gaf, "se": s_, "pct": 100 * (np.exp(gaf) - 1),
+                "ci_pct": [100 * (np.exp(gaf - 1.96 * s_) - 1), 100 * (np.exp(gaf + 1.96 * s_) - 1)],
+                "mde80_pct": 100 * (np.exp(-2.8 * s_) - 1)}      # smallest drop detectable with 80% power
 
 # ------------------------------------------------------------------ 4. what moved Japan in 2019H2? (money vs mind, same period)
 JP = S[S.country == "JP"]
@@ -68,7 +74,8 @@ lagmean = lambda df: df[lag_cols(K)].mean(axis=1).values
 dfx = (lagmean(H) - lagmean(Bm)).mean()
 R["h2_2019"] = {"actual_log": float(dv.mean()), "actual_pct": float(100 * (np.exp(dv.mean()) - 1)),
                 "yen_change_pct": float(100 * (np.exp(dfx) - 1)),
-                "money_log": float(th * dfx), "mind_log": float(ga)}
+                "money_log": float(th * dfx), "mind_log": float(ga),
+                "common_and_rest_log": float(dv.mean() - th * dfx - ga)}   # lambda_t etc.: comparison countries grew
 
 # ------------------------------------------------------------------ 5. naive version (Japan-only Model 1) for contrast
 m1, X1 = m1_fit(K, japan_sample(P))
