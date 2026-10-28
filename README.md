@@ -64,7 +64,8 @@ ln V_ct = Σ_{k=0}^{10} β_k · ln FX_{c,t−k}  +  γ · 불매_ct
 
 **강건성**: 비교국 하나씩 제외, 다른 재개 시점 기준, 회복 전환기 제외, 국가별 추세 추가, 재개 직후 3개월 제외, 태국·필리핀 2025년 제외, 전년동월비 모형. 엔화 10% 하락 효과는 +6 ~ +17% 범위이고, 대만을 뺄 때(+6%)만 신뢰구간에 0이 들어가요. 손익분기 엔저 폭은 48 ~ 87% 범위예요.
 
-방법 설명 전체: [`docs/methodology.md`](docs/methodology.md)
+방법 설명 전체: [`docs/methodology.md`](docs/methodology.md)  
+진단 표와 표준오차 민감도: [`results/diagnostics_appendix.md`](results/diagnostics_appendix.md)
 
 ## 그림
 
@@ -103,6 +104,7 @@ bash run_all.sh          # 약 1분
 │   ├── demand_shift.py        4. 2019년 목적지 비중 이동
 │   ├── yen_tiers.py           5. 엔저 폭 구간별 효과
 │   ├── lag_sensitivity.py     부록: 시차 길이 민감도
+│   ├── diagnostics.py         부록: 시계열 진단, 표준오차 민감도 (tsdiag.py 사용)
 │   └── figures.py             그림 1~6
 ├── results/                   분석 결과 (JSON, CSV)
 ├── figures/                   보고서용 그림 (PNG)

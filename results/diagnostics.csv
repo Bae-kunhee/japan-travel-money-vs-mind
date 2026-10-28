@@ -1,0 +1,121 @@
+series,section,label,value,verdict,note
+일본 ln(방문자) 2015.01–2019.06,[1] DATA INTEGRITY,missing,0,OK,결측 없음
+일본 ln(방문자) 2015.01–2019.06,[1] DATA INTEGRITY,infinite,0,OK,
+일본 ln(방문자) 2015.01–2019.06,[1] DATA INTEGRITY,non-positive,0,OK,로그값 시리즈면 해당 없음
+일본 ln(방문자) 2015.01–2019.06,[1] DATA INTEGRITY,period,2015-01~2019-06,,
+일본 ln(방문자) 2015.01–2019.06,[1] DATA INTEGRITY,gaps (missing months),0,OK,등간격
+일본 ln(방문자) 2015.01–2019.06,[1] DATA INTEGRITY,duplicate index,0,OK,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,n,54,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,mean,13.10528742300039,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,std,0.2947526379037983,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,min,12.43521417296802,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,p01,12.469192476534285,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,q1,12.843219770255555,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,median,13.228082564556047,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,q3,13.33320041037024,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,p99,13.58076572893608,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,max,13.597125666248244,,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,skewness,-0.5150617299415099,OK,
+일본 ln(방문자) 2015.01–2019.06,[2] DESCRIPTIVE,excess kurtosis,-0.8087771847116385,OK,
+일본 ln(방문자) 2015.01–2019.06,[3] DISTRIBUTION & TRANSFORMATION,Jarque-Bera p,0.14519403818731283,OK,정규성 기각 못 함
+일본 ln(방문자) 2015.01–2019.06,[3] DISTRIBUTION & TRANSFORMATION,log skew / kurt,-0.55 / -0.77,,
+일본 ln(방문자) 2015.01–2019.06,[3] DISTRIBUTION & TRANSFORMATION,log improvement,0.0026619517238791746,,log 변환 이득 작음
+일본 ln(방문자) 2015.01–2019.06,[4] STATIONARITY,"ADF p (H0 단위근, ct)",0.9562822778870632,WARN,
+일본 ln(방문자) 2015.01–2019.06,[4] STATIONARITY,"KPSS p (H0 정상, ct)",0.01522883323491186,WARN,KPSS p는 0.01~0.1로 잘림
+일본 ln(방문자) 2015.01–2019.06,[4] STATIONARITY,verdict,단위근,WARN,차분 또는 패널 고정효과로 처리
+일본 ln(방문자) 2015.01–2019.06,[4] STATIONARITY,ADF p (1차 차분),0.0045128034755495625,OK,
+일본 ln(방문자) 2015.01–2019.06,[5] DEPENDENCE,95% band,0.2667222164363905,,
+일본 ln(방문자) 2015.01–2019.06,[5] DEPENDENCE,ACF lag 1,0.8727720264199658,,
+일본 ln(방문자) 2015.01–2019.06,[5] DEPENDENCE,ACF lag 6,0.5752498710164375,,
+일본 ln(방문자) 2015.01–2019.06,[5] DEPENDENCE,ACF lag 12,0.39061825955079393,,계절 랙
+일본 ln(방문자) 2015.01–2019.06,[5] DEPENDENCE,ACF > band (count),13,,lag 1~24
+일본 ln(방문자) 2015.01–2019.06,[5] DEPENDENCE,PACF > band (count),3,,
+일본 ln(방문자) 2015.01–2019.06,[5] DEPENDENCE,Ljung-Box p (lag 12),5.037248946785082e-43,WARN,자기상관 있음
+일본 ln(방문자) 2015.01–2019.06,[6] LONG MEMORY,GPH d (se),1.304 (0.389),WARN,m=7. n이 작아 참고용
+일본 ln(방문자) 2015.01–2019.06,[6] LONG MEMORY,last lag above band,13,,
+일본 ln(방문자) 계절조정,[1] DATA INTEGRITY,missing,0,OK,결측 없음
+일본 ln(방문자) 계절조정,[1] DATA INTEGRITY,infinite,0,OK,
+일본 ln(방문자) 계절조정,[1] DATA INTEGRITY,non-positive,0,OK,로그값 시리즈면 해당 없음
+일본 ln(방문자) 계절조정,[1] DATA INTEGRITY,period,2015-01~2019-06,,
+일본 ln(방문자) 계절조정,[1] DATA INTEGRITY,gaps (missing months),0,OK,등간격
+일본 ln(방문자) 계절조정,[1] DATA INTEGRITY,duplicate index,0,OK,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,n,54,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,mean,13.105287423000389,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,std,0.27901582236932726,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,min,12.523714026575863,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,p01,12.552484019801668,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,q1,12.845445726886052,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,median,13.206363528334059,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,q3,13.348141207209864,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,p99,13.43407219352582,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,max,13.436295231338383,,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,skewness,-0.5373213951109131,OK,
+일본 ln(방문자) 계절조정,[2] DESCRIPTIVE,excess kurtosis,-1.106118885501082,OK,
+일본 ln(방문자) 계절조정,[3] DISTRIBUTION & TRANSFORMATION,Jarque-Bera p,0.06886201013564998,OK,정규성 기각 못 함
+일본 ln(방문자) 계절조정,[3] DISTRIBUTION & TRANSFORMATION,log skew / kurt,-0.56 / -1.08,,
+일본 ln(방문자) 계절조정,[3] DISTRIBUTION & TRANSFORMATION,log improvement,0.007062512808746146,,log 변환 이득 작음
+일본 ln(방문자) 계절조정,[4] STATIONARITY,"ADF p (H0 단위근, ct)",0.3277726780263962,WARN,
+일본 ln(방문자) 계절조정,[4] STATIONARITY,"KPSS p (H0 정상, ct)",0.01,WARN,KPSS p는 0.01~0.1로 잘림
+일본 ln(방문자) 계절조정,[4] STATIONARITY,verdict,단위근,WARN,차분 또는 패널 고정효과로 처리
+일본 ln(방문자) 계절조정,[4] STATIONARITY,ADF p (1차 차분),3.5291093176115163e-06,OK,
+일본 ln(방문자) 계절조정,[5] DEPENDENCE,95% band,0.2667222164363905,,
+일본 ln(방문자) 계절조정,[5] DEPENDENCE,ACF lag 1,0.9144406119110343,,
+일본 ln(방문자) 계절조정,[5] DEPENDENCE,ACF lag 6,0.6260531226492605,,
+일본 ln(방문자) 계절조정,[5] DEPENDENCE,ACF lag 12,0.34903458495296635,,계절 랙
+일본 ln(방문자) 계절조정,[5] DEPENDENCE,ACF > band (count),14,,lag 1~24
+일본 ln(방문자) 계절조정,[5] DEPENDENCE,PACF > band (count),1,,
+일본 ln(방문자) 계절조정,[5] DEPENDENCE,Ljung-Box p (lag 12),1.2227347127517745e-56,WARN,자기상관 있음
+일본 ln(방문자) 계절조정,[6] LONG MEMORY,GPH d (se),1.004 (0.271),WARN,m=7. n이 작아 참고용
+일본 ln(방문자) 계절조정,[6] LONG MEMORY,last lag above band,24,,
+ln(원/100엔) 2015.01–2025.12,[1] DATA INTEGRITY,missing,0,OK,결측 없음
+ln(원/100엔) 2015.01–2025.12,[1] DATA INTEGRITY,infinite,0,OK,
+ln(원/100엔) 2015.01–2025.12,[1] DATA INTEGRITY,non-positive,0,OK,로그값 시리즈면 해당 없음
+ln(원/100엔) 2015.01–2025.12,[1] DATA INTEGRITY,period,2015-01~2025-12,,
+ln(원/100엔) 2015.01–2025.12,[1] DATA INTEGRITY,gaps (missing months),0,OK,등간격
+ln(원/100엔) 2015.01–2025.12,[1] DATA INTEGRITY,duplicate index,0,OK,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,n,132,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,mean,6.904555000329544,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,std,0.0686887262318872,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,min,6.773400690481987,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,p01,6.77379371681311,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,q1,6.847338916209786,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,median,6.908584556899918,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,q3,6.953300568344875,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,p99,7.035960410049013,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,max,7.043727440505352,,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,skewness,0.024796750999327762,OK,
+ln(원/100엔) 2015.01–2025.12,[2] DESCRIPTIVE,excess kurtosis,-0.8696295429913379,OK,
+ln(원/100엔) 2015.01–2025.12,[3] DISTRIBUTION & TRANSFORMATION,Jarque-Bera p,0.12412496878707309,OK,정규성 기각 못 함
+ln(원/100엔) 2015.01–2025.12,[3] DISTRIBUTION & TRANSFORMATION,log skew / kurt,0.01 / -0.87,,
+ln(원/100엔) 2015.01–2025.12,[3] DISTRIBUTION & TRANSFORMATION,log improvement,0.016717861606233564,,log 변환 이득 작음
+ln(원/100엔) 2015.01–2025.12,[4] STATIONARITY,"ADF p (H0 단위근, ct)",0.3943632487830498,WARN,
+ln(원/100엔) 2015.01–2025.12,[4] STATIONARITY,"KPSS p (H0 정상, ct)",0.01,WARN,KPSS p는 0.01~0.1로 잘림
+ln(원/100엔) 2015.01–2025.12,[4] STATIONARITY,verdict,단위근,WARN,차분 또는 패널 고정효과로 처리
+ln(원/100엔) 2015.01–2025.12,[4] STATIONARITY,ADF p (1차 차분),5.231492516032403e-17,OK,
+ln(원/100엔) 2015.01–2025.12,[5] DEPENDENCE,95% band,0.17059610283658388,,
+ln(원/100엔) 2015.01–2025.12,[5] DEPENDENCE,ACF lag 1,0.9485168915049665,,
+ln(원/100엔) 2015.01–2025.12,[5] DEPENDENCE,ACF lag 6,0.6811297855632393,,
+ln(원/100엔) 2015.01–2025.12,[5] DEPENDENCE,ACF lag 12,0.4038529885120466,,계절 랙
+ln(원/100엔) 2015.01–2025.12,[5] DEPENDENCE,ACF > band (count),18,,lag 1~24
+ln(원/100엔) 2015.01–2025.12,[5] DEPENDENCE,PACF > band (count),1,,
+ln(원/100엔) 2015.01–2025.12,[5] DEPENDENCE,Ljung-Box p (lag 12),1.3058745811955674e-159,WARN,자기상관 있음
+ln(원/100엔) 2015.01–2025.12,[6] LONG MEMORY,GPH d (se),1.150 (0.254),WARN,m=11. n이 작아 참고용
+ln(원/100엔) 2015.01–2025.12,[6] LONG MEMORY,last lag above band,18,,
+모형 1 잔차 (일본 단독),[7] RESIDUAL BASICS,n,89,,
+모형 1 잔차 (일본 단독),[7] RESIDUAL BASICS,mean,-4.989766402809693e-16,OK,
+모형 1 잔차 (일본 단독),[7] RESIDUAL BASICS,std,0.2591099751175621,,
+모형 1 잔차 (일본 단독),[7] RESIDUAL BASICS,skewness,-1.816308553767178,WARN,
+모형 1 잔차 (일본 단독),[7] RESIDUAL BASICS,excess kurtosis,8.62923351088937,WARN,
+모형 1 잔차 (일본 단독),[7] RESIDUAL BASICS,Jarque-Bera p,2.580734363014499e-71,WARN,
+모형 1 잔차 (일본 단독),[8] RESIDUAL DYNAMICS,Ljung-Box p (lag 12),2.4133429784956617e-15,WARN,잔차 자기상관 → HAC/DK 표준오차 필요
+모형 1 잔차 (일본 단독),[8] RESIDUAL DYNAMICS,LB on e² p (lag 12),0.36920500600449335,OK,
+모형 1 잔차 (일본 단독),[8] RESIDUAL DYNAMICS,ARCH-LM p (lag 6),0.25153855770589484,OK,
+모형 2 잔차 · 일본,[7] RESIDUAL BASICS,n,89,,
+모형 2 잔차 · 일본,[7] RESIDUAL BASICS,mean,5.74022726979227e-13,OK,
+모형 2 잔차 · 일본,[7] RESIDUAL BASICS,std,0.141301778198419,,
+모형 2 잔차 · 일본,[7] RESIDUAL BASICS,skewness,1.3238418259008917,WARN,
+모형 2 잔차 · 일본,[7] RESIDUAL BASICS,excess kurtosis,3.072247627874641,WARN,
+모형 2 잔차 · 일본,[7] RESIDUAL BASICS,Jarque-Bera p,5.680991589453547e-14,WARN,
+모형 2 잔차 · 일본,[8] RESIDUAL DYNAMICS,Ljung-Box p (lag 12),1.517271889664768e-07,WARN,잔차 자기상관 → HAC/DK 표준오차 필요
+모형 2 잔차 · 일본,[8] RESIDUAL DYNAMICS,LB on e² p (lag 12),0.00023894692626071152,WARN,이분산 군집
+모형 2 잔차 · 일본,[8] RESIDUAL DYNAMICS,ARCH-LM p (lag 6),0.018242076070776807,WARN,

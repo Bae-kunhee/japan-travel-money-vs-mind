@@ -8,4 +8,5 @@ python3 money_vs_mind.py    # results/money_vs_mind.json    (boycott effect, bre
 python3 demand_shift.py     # results/share_shift_2019.csv  (where the Japan demand went)
 python3 yen_tiers.py        # results/yen_tiers.json        (effect by size of yen weakness)
 python3 lag_sensitivity.py  # results/lag_sensitivity.csv   (appendix)
+python3 diagnostics.py      # results/diagnostics_appendix.md (appendix: time-series diagnostics, SE sensitivity)
 python3 figures.py          # figures/fig1..fig6.png
