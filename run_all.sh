@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Reproduce every number and figure: bash run_all.sh
+set -euo pipefail
+cd "$(dirname "$0")/src"
+python3 build_panel.py      # data/processed/panel.csv
+python3 main_models.py      # results/main_models.json      (money effect, robustness, decomposition)
+python3 money_vs_mind.py    # results/money_vs_mind.json    (boycott effect, break-even yen fall)
+python3 demand_shift.py     # results/share_shift_2019.csv  (where the Japan demand went)
+python3 yen_tiers.py        # results/yen_tiers.json        (effect by size of yen weakness)
+python3 lag_sensitivity.py  # results/lag_sensitivity.csv   (appendix)
+python3 figures.py          # figures/fig1..fig6.png
