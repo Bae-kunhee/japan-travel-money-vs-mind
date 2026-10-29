@@ -12,3 +12,4 @@ python3 diagnostics.py      # results/diagnostics_appendix.md (appendix: time-se
 python3 figures.py          # figures/fig1..fig6.png
 python3 xgb_robustness.py   # results/xgb_robustness.json  (linearity check with XGBoost, fig7; ~2 min)
 python3 boycott_stock.py    # results/boycott_stock.json   (search-volume boycott stock, fig8)
+python3 comparison_expansion.py  # results/comparison_expansion.csv (more comparison countries, boycott window by destination, fig9)

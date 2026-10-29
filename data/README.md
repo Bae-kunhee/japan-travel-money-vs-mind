@@ -7,6 +7,7 @@
 | `kto_outbound_by_destination_202512.xlsx` | 한국관광 데이터랩 (한국관광공사) `국민 해외관광객 주요 목적지별 통계` 2025년 12월 판 (최종 수정 2026.2.6) | 목적지 국가가 집계한 한국인 입국자 수, 월별 2004~2025 | `Asia` 시트의 일본·베트남·태국·필리핀·대만 열 (패널). `Asia`·`Oceania`·`America`·`Europe` 시트의 전 목적지와 `법무부・KTO` 전체 출국자 열 (수요 이동 분석) |
 | `ecos_fx_monthly_2015_2026.csv` | 한국은행 ECOS `주요국 통화의 대원화 환율` | 월평균, 월말 환율 | 월평균 열만 사용. 원/100엔, 원/대만달러, 원/바트, 원/페소, 원/100동 |
 | `naver_datalab_boycott_search.csv` | [네이버 데이터랩](https://datalab.naver.com/) 검색어 트렌드 (PC + 모바일, 전체 연령·성별) | '노재팬', '일본 불매', '불매운동' 월별 상대 검색량 2016.01 ~ 2026.09. 세 검색어를 한 번에 요청해 같은 척도(기간 중 최댓값 = 100) | `no_japan` + `japan_boycott`의 합을 불매 강도로 사용 (`boycott_stock.py`). `boycott_movement`('불매운동')는 일본과 무관한 불매(2016년 5월 등)까지 잡아서 쓰지 않음 |
+| `ecb_krw_cross_monthly.csv` | 유럽중앙은행 유로 기준환율 (일별, `currencyconverter` 0.18.22 패키지에 포함된 eurofxref-hist, 2026.9.14까지) | 원화 교차환율 = (원/유로) ÷ (해당 통화/유로), 일별 → 월평균. 엔·루피아는 100단위 | 비교국 확장(`comparison_expansion.py`)의 싱가포르달러·링깃·루피아·홍콩달러(마카오에도 사용)·미국 달러(캄보디아). 엔·바트·페소는 ECOS와 대조용(평균 차이 0.13%). 생성: `src/fetch_ecb_fx.py` |
 | (포함하지 않음) | [JNTO 일본정부관광국 訪日外客統計](https://www.jnto.go.jp/statistics/data/visitors-statistics/) `訪日外客数（2003年～2026年）` PDF | 일본 측 국적별 방일객 수 | 검증용. 2015~2024 엑셀 값과 정확히 일치함을 확인했고, 2025년 11~12월은 엑셀의 반올림 잠정치를 JNTO 확정치(824,567명, 974,239명)로 바꿨어요. 보고서 파일이라 레포에는 넣지 않았고, 두 값은 `src/build_panel.py`에 직접 적혀 있어 PDF 없이도 재현돼요 |
 
 ## 가공 자료 (`processed/panel.csv`)

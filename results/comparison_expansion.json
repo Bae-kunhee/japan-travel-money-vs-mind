@@ -1,0 +1,59 @@
+{
+ "fx_check_ecb_vs_ecos_mean_abs_log_diff": {
+  "JP": 0.001280184675966637,
+  "TH": 0.0012626854070865341,
+  "PH": 0.0013667154782063334
+ },
+ "level_change_2017_18_to_2024_25_pct": {
+  "HK": {
+   "fx_pct": 25.1,
+   "visitors_pct": -41.3
+  },
+  "ID": {
+   "fx_pct": 6.6,
+   "visitors_pct": 18.7
+  },
+  "JP": {
+   "fx_pct": -7.7,
+   "visitors_pct": 24.2
+  },
+  "KH": {
+   "fx_pct": 24.9,
+   "visitors_pct": -39.9
+  },
+  "MO": {
+   "fx_pct": 25.1,
+   "visitors_pct": -39.4
+  },
+  "MY": {
+   "fx_pct": 17.5,
+   "visitors_pct": -15.8
+  },
+  "PH": {
+   "fx_pct": 12.0,
+   "visitors_pct": -10.8
+  },
+  "SG": {
+   "fx_pct": 28.9,
+   "visitors_pct": -8.9
+  },
+  "TH": {
+   "fx_pct": 21.4,
+   "visitors_pct": -4.4
+  },
+  "TW": {
+   "fx_pct": 19.5,
+   "visitors_pct": -4.4
+  },
+  "VN": {
+   "fx_pct": 11.8,
+   "visitors_pct": 54.6
+  }
+ },
+ "japan_gap_persons": -3435115.9748155014,
+ "all_departures_gap_persons": -3752548.0150186694,
+ "sum_of_positive_gaps_elsewhere": 324764.47507389146,
+ "main_comparison_mean_log_gap_pct": 1.6391214697284884,
+ "usd_change_boycott_window_pct": 5.192396020955536,
+ "note": "Positive gaps elsewhere are all inside their placebo ranges; HK and MO fell far outside theirs."
+}
