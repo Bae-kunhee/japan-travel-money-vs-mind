@@ -240,25 +240,26 @@ INK2, GRID, MUTED, BLUE, ORANGE = "#52514e", "#e6e5e0", "#a3a29c", "#2a78d6", "#
 
 fig, ax = plt.subplots(1, 2, figsize=(12.5, 5.2), gridspec_kw={"width_ratios": [1, 1.25]})
 a = ax[0]
-labs = ["현재 5개국", "+동남아 3 (8)", "+동남아 3\n+캄보디아 (9)", "+동남아 3\n+홍콩·마카오 (10)", "11개국 전부"]
+labs = ["5개국 (본 분석)", "8개국\n+싱가포르·말레이시아\n·인도네시아", "9개국\n+위 3국·캄보디아", "10개국\n+위 3국·홍콩·마카오", "11개국\n(모두)"]
 y = np.arange(len(R))[::-1]
 a.errorbar(R.theta, y + 0.12, xerr=1.96 * R.theta_se_dk, fmt="o", color=BLUE, ms=6, capsize=0, lw=1.6,
-           label="θ (본 모형)")
+           label="기본")
 a.errorbar(R.theta_postFE, y - 0.12, xerr=1.96 * R.theta_postFE_se, fmt="s", color=ORANGE, ms=5.5, capsize=0,
-           lw=1.6, mfc="white", label="θ (+ 나라별 코로나 이후 수준)")
+           lw=1.6, mfc="white", label="+ 나라별 코로나 이후 수준 통제")
 a.axvline(0, color=MUTED, lw=1)
 for yy, (_, r) in zip(y, R.iterrows()):
     a.text(1.05, yy, f"{r.ratio:.1f}배", va="center", ha="right", fontsize=9.5, color=INK2,
            transform=a.get_yaxis_transform())
-a.text(1.05, len(R) - 0.45, "불매 ÷ 10% 엔저", ha="right", fontsize=8.5, color=MUTED, transform=a.get_yaxis_transform())
-a.set_ylim(-0.6, len(R) - 0.25); a.set_xlim(-2.2, 1.9)
+a.text(1.05, len(R) - 0.5, "불매 ÷ 10% 엔저", ha="right", fontsize=8.5, color=MUTED, transform=a.get_yaxis_transform())
+a.set_ylim(-0.6, len(R) + 0.5); a.set_xlim(-2.2, 1.9)
 a.set_yticks(y); a.set_yticklabels(labs, fontsize=9)
-a.set_xlabel("누적 환율 탄력성 θ (95% 구간, 음수일수록 엔저에 민감)")
+a.set_xlabel("누적 환율 탄력성 θ")
+a.text(-2.15, -0.5, "← 엔저에 더 민감", fontsize=8.5, color=MUTED, va="center")
+a.text(-0.07, 1.02, "(a)", transform=a.transAxes, fontsize=11, weight="bold")
 a.grid(axis="x", color=GRID); a.set_axisbelow(True)
 for s in ["top", "right", "left"]:
     a.spines[s].set_visible(False)
-a.legend(frameon=False, fontsize=8.5, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=2)
-a.set_title("동남아 3국은 결론을 지키고, 홍콩·마카오·캄보디아는 흔든다", loc="left", fontsize=11, pad=24)
+a.legend(frameon=False, fontsize=8.5, loc="upper left", ncol=2)
 
 b = ax[1]
 H = G[~G.region.isin(["전체 출국자", "기타"])].sort_values("gap_pct")
@@ -266,22 +267,23 @@ H = H[H.destination != "슬로베니아"]
 col = [ORANGE if d == "일본" else ("#c0392b" if d in ("홍콩", "마카오") else BLUE) for d in H.destination]
 yy = np.arange(len(H))
 b.barh(yy, 1.96 * H.placebo_sd_pct * 2, left=-1.96 * H.placebo_sd_pct, color="#ecebe6", height=0.75,
-       label="가짜 구간 범위 (±1.96 SD)")
+       label="우연 범위 (가짜 구간 기준)")
 b.barh(yy, H.gap_pct, color=col, height=0.45)
 b.set_yticks(yy); b.set_yticklabels([d.replace("(미국령)", "") for d in H.destination], fontsize=8.8)
 b.axvline(0, color=MUTED, lw=1)
 for i, v in zip(yy, H.gap_pct):
-    b.text(v + (1.5 if v >= 0 else -1.5), i, f"{v:+.0f}%", va="center", ha="left" if v >= 0 else "right",
-           fontsize=8, color=INK2)
+    b.text(v + (1.5 if v >= 0 else -1.5), i, "0%" if round(v) == 0 else f"{v:+.0f}%", va="center",
+           ha="left" if v >= 0 else "right", fontsize=8, color=INK2)
+for i, d in zip(yy, H.destination):
+    if d in ("홍콩", "마카오"):
+        b.text(2, i, "시위 영향", va="center", fontsize=8.5, color="#c0392b")
 b.set_xlim(-80, 32)
-b.set_xlabel("2019.7~2020.1 방문객, 자기 추세 대비 (%)")
+b.set_xlabel("방문객 변화 (%, 자기 추세 대비)")
+b.text(-0.02, 1.02, "(b)", transform=b.transAxes, fontsize=11, weight="bold")
 b.grid(axis="x", color=GRID); b.set_axisbelow(True)
 for s in ["top", "right", "left"]:
     b.spines[s].set_visible(False)
 b.legend(frameon=False, fontsize=8.5, loc="upper left")
-b.set_title("불매 기간: 미국·유럽·오세아니아로 옮겨간 흔적 없음", loc="left", fontsize=11, pad=24)
-fig.text(0.01, 0.01, "자료: 한국관광 데이터랩(2025.12), 한국은행 ECOS, ECB 기준환율. 오른쪽: 각 목적지 2016.1~2019.6 계절성+추세로 예측한 값과 비교, "
-         "회색은 2017~18년 가짜 구간 18개의 범위.", fontsize=7.8, color=MUTED)
-fig.tight_layout(rect=(0, 0.035, 1, 1))
+fig.tight_layout()
 fig.savefig(FIGURES / "fig9_comparison_countries.png", dpi=160)
 print("wrote figures/fig9_comparison_countries.png")
