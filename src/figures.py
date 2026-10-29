@@ -206,33 +206,4 @@ titles(fig, "엔저 폭별 효과는 일정 탄력성 가정과 통계적으로 
 fig.subplots_adjust(top=0.85, bottom=0.2, left=0.1, right=0.93)
 fig.savefig(FIGURES / "fig6_yen_tiers.png", dpi=200); plt.close(fig)
 
-# ------------------------------------------------------------------ 7. response path after a 10% relative yen fall
-RC = json.load(open(RESULTS / "response_curves.json"))
-cur = RC["panel_curve"]
-hs = [p["h"] for p in cur]
-fig, ax = plt.subplots(figsize=(8.6, 5.2))
-for name, ys in RC["alt_curves"].items():
-    ax.plot(range(len(ys)), ys, color=MUTED, lw=1.0, alpha=0.9, zorder=1)
-ax.fill_between(hs, [p["lo"] for p in cur], [p["hi"] for p in cur], color=BLUE, alpha=0.14, lw=0, zorder=2)
-ax.plot(hs, [p["pct"] for p in cur], color=BLUE, lw=2.4, zorder=3)
-end = cur[-1]
-ax.scatter([end["h"]], [end["pct"]], s=60, color=BLUE, zorder=4, edgecolor="#fcfcfb", lw=1.5)
-ax.text(end["h"] + 0.25, end["pct"] - 6, f"10개월 누적 {end['pct']:+.0f}%", color=INK, fontsize=10, weight="bold")
-by = MV["main"]["boycott_pct"]
-ax.axhline(by, color=ORANGE, lw=1.4, ls=(0, (4, 3)))
-ax.text(0.1, by + 3, f"불매운동 평균 효과 {by:.0f}%", color=INK, fontsize=10, va="bottom")
-ax.axhline(0, color=INK2, lw=0.9)
-ax.axvspan(-0.3, 3, color=GRID, alpha=0.55, lw=0, zorder=0)
-ax.text(1.35, 57, "모든 사양에서\n공통으로 늘어나는 구간", ha="center", va="top", fontsize=8.8, color=INK2)
-ax.set_xlim(-0.3, 12.6); ax.set_ylim(-72, 62)
-ax.set_xticks(range(0, 13))
-ax.set_xlabel("엔화가 비교국 통화 대비 10% 싸진 뒤 경과 개월")
-ax.set_ylabel("방일 한국인 수 누적 변화 (%)")
-style(ax)
-titles(fig, "엔저 효과는 몇 달에 걸쳐 쌓이지만, 어느 시점에서도 불매 충격보다 훨씬 작다",
-       f"파란 선과 띠 = 본 분석(Almon 시차, 95% 신뢰구간), 회색 선 = 다른 사양 5개. 로그 기준 불매는 10개월 누적의 약 11배, 정점({RC['peak_ratio']['peak_pct']:+.0f}%)의 {RC['peak_ratio']['boycott_over_peak']:.1f}배",
-       "주: 처음 3개월의 증가는 사양과 무관하게 나타나지만, 그 뒤 정점과 하락의 모양은 사양에 따라 달라진다. 확실한 것은 10개월 누적 효과다")
-fig.subplots_adjust(top=0.85, bottom=0.15, left=0.09, right=0.97)
-fig.savefig(FIGURES / "fig7_response_path.png", dpi=200); plt.close(fig)
-
 print("wrote", sorted(p.name for p in FIGURES.glob("fig*.png")))
