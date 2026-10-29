@@ -115,7 +115,8 @@ bash run_all.sh          # 약 1분
 ├── figures/                   보고서용 그림 (PNG)
 └── docs/
     ├── methodology.md         방법론 상세
-    └── strategy.md            국면별 여행사 전략 (결과 해석)
+    ├── strategy.md            국면별 여행사 전략 (결과 해석)
+    └── report_flow_explainer.md  보고서 흐름 해설과 검토
 ```
 
 ## 한계
@@ -130,5 +131,6 @@ bash run_all.sh          # 약 1분
 
 ## 관련 문서
 
+- [`docs/report_flow_explainer.md`](docs/report_flow_explainer.md): 처음 보는 사람을 위한 분석 흐름 해설, 방법별 선택 근거, 오류·약점 검토
 - 연구 설계 문서, 상세 분석 명세 (Claude Docs)
 - Notion `2026 학술제` › 타임라인
