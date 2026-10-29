@@ -1,0 +1,94 @@
+{
+ "dummy_reference": {
+  "theta": -0.9095713957427582,
+  "gamma": -1.053229135316503,
+  "yen10_pct": 10.057515493931435,
+  "boycott_pct": -65.1190424739746,
+  "ratio_boycott_to_yen10": 10.990265465331998,
+  "aic": -19.12870986421217,
+  "rmse_boycott_months": 0.2611889443394323
+ },
+ "best_excess_lag1": {
+  "search": "excess",
+  "lag": 1,
+  "delta": 0.85,
+  "half_life_months": 4.265024281798726,
+  "theta": -0.9860975307505624,
+  "yen10_pct": 10.948477880542873,
+  "gamma_avg": -1.0246999018593304,
+  "gamma_se": 0.07093594328628718,
+  "boycott_pct_avg": -64.10958442838786,
+  "ratio_boycott_to_yen10": 9.862770688822105,
+  "aic": -43.279710965861796,
+  "rmse_boycott_months": 0.11026903435206861
+ },
+ "best_by_spec": [
+  {
+   "search": "excess",
+   "lag": 0,
+   "delta": 0.9,
+   "half_life_months": 6.578813478960585,
+   "theta": -1.0079322193843325,
+   "yen10_pct": 11.20401022832278,
+   "gamma_avg": -1.0655920343781746,
+   "gamma_se": 0.13045041515448014,
+   "boycott_pct_avg": -65.54761755714695,
+   "ratio_boycott_to_yen10": 10.034176821375357,
+   "aic": -27.034143780301292,
+   "rmse_boycott_months": 0.1908164393413375
+  },
+  {
+   "search": "excess",
+   "lag": 1,
+   "delta": 0.85,
+   "half_life_months": 4.265024281798726,
+   "theta": -0.9860975307505624,
+   "yen10_pct": 10.948477880542873,
+   "gamma_avg": -1.0246999018593304,
+   "gamma_se": 0.07093594328628718,
+   "boycott_pct_avg": -64.10958442838786,
+   "ratio_boycott_to_yen10": 9.862770688822105,
+   "aic": -43.279710965861796,
+   "rmse_boycott_months": 0.11026903435206861
+  },
+  {
+   "search": "raw",
+   "lag": 0,
+   "delta": 0.85,
+   "half_life_months": 4.265024281798726,
+   "theta": -1.116114410969981,
+   "yen10_pct": 12.478779351017199,
+   "gamma_avg": -1.0509476288629558,
+   "gamma_se": 0.1610773887982836,
+   "boycott_pct_avg": -65.03937049276294,
+   "ratio_boycott_to_yen10": 8.93705584083223,
+   "aic": -20.349627117439923,
+   "rmse_boycott_months": 0.21990920042675802
+  },
+  {
+   "search": "raw",
+   "lag": 1,
+   "delta": 0.8,
+   "half_life_months": 3.1062837195053903,
+   "theta": -1.107008475886131,
+   "yen10_pct": 12.370918282989884,
+   "gamma_avg": -1.0140125739236825,
+   "gamma_se": 0.08180411413307946,
+   "boycott_pct_avg": -63.72395478269644,
+   "ratio_boycott_to_yen10": 8.693897323013905,
+   "aic": -38.176164940011176,
+   "rmse_boycott_months": 0.1218405727015105
+  }
+ ],
+ "ratio_range_delta_0.6_0.9": [
+  8.3082628708258,
+  9.959521824654948
+ ],
+ "search_2019_jul_oct": [
+  79.9,
+  49.6,
+  18.5,
+  13.5
+ ],
+ "note": "delta and lag are tuned on one episode; add 4 to AIC for the two tuned values"
+}
