@@ -7,6 +7,7 @@ python3 main_models.py      # results/main_models.json      (money effect, robus
 python3 money_vs_mind.py    # results/money_vs_mind.json    (boycott effect, break-even yen fall)
 python3 demand_shift.py     # results/share_shift_2019.csv  (where the Japan demand went)
 python3 yen_tiers.py        # results/yen_tiers.json        (effect by size of yen weakness)
+python3 response_curves.py  # results/response_curves.json  (cumulative response path, Japan-only share model)
 python3 lag_sensitivity.py  # results/lag_sensitivity.csv   (appendix)
 python3 diagnostics.py      # results/diagnostics_appendix.md (appendix: time-series diagnostics, SE sensitivity)
 python3 figures.py          # figures/fig1..fig6.png
