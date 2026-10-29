@@ -10,6 +10,7 @@ python3 yen_tiers.py        # results/yen_tiers.json        (effect by size of y
 python3 lag_sensitivity.py  # results/lag_sensitivity.csv   (appendix)
 python3 diagnostics.py      # results/diagnostics_appendix.md (appendix: time-series diagnostics, SE sensitivity)
 python3 figures.py          # figures/fig1..fig6.png
-python3 xgb_robustness.py   # results/xgb_robustness.json  (linearity check with XGBoost, fig7; ~2 min)
+python3 xgb_robustness.py   # results/xgb_robustness.json  (XGBoost out-of-sample comparison; ~2 min)
+python3 spline_check.py     # results/spline_check.json    (appendix: natural spline check, not adopted)
 python3 boycott_stock.py    # results/boycott_stock.json   (search-volume boycott stock, fig8)
 python3 comparison_expansion.py  # results/comparison_expansion.csv (more comparison countries, boycott window by destination, fig9)

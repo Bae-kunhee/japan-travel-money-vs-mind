@@ -14,14 +14,14 @@
 | 2 | 불매운동 효과는 얼마나 컸고, 엔화가 얼마나 떨어져야 상쇄될까? | `money_vs_mind.py` | `results/money_vs_mind.json`, 그림 4 |
 | 3 | 일본에서 빠진 수요는 다른 나라로 갔을까? | `demand_shift.py` | `results/share_shift_2019.csv`, 그림 5 |
 | 4 | 이슈 없는 기간에 엔저 폭에 따라 효과가 달라질까? | `yen_tiers.py` | `results/yen_tiers.json`, 그림 6 |
-| 5 | 선형 가정이 틀렸다면? 함수 형태를 데이터에 맡겨도 결론이 같을까? | `xgb_robustness.py` | `results/xgb_robustness.json`, 그림 7 |
+| 5 | 선형 가정이 틀렸다면? 머신러닝(XGBoost)이 표본 밖 예측을 더 잘할까? | `xgb_robustness.py` | `results/xgb_oos_rolling.csv`, `results/xgb_robustness.json` |
 | 6 | 불매의 강도는 얼마였고, 관심이 식은 뒤 얼마나 이어졌을까? | `boycott_stock.py` | `results/boycott_stock.json`, 그림 8 |
 | 7 | 비교국을 늘려도 같을까? 불매 기간에 미국·유럽 등으로 옮겨갔을까? | `comparison_expansion.py` | `results/comparison_expansion.csv`, `results/boycott_window_by_destination.csv`, 그림 9 |
 | 8 | 국면별로 여행사는 어떻게 대응해야 할까? | (1~7의 결과를 해석) | 보고서 |
 
 ## 핵심 결과
 
-**한 줄 결론**: 불매운동은 엔화 10% 하락 효과의 약 11배(95% 구간 6~24배) 크기의 충격이었어요. 함수 형태를 XGBoost에 맡기거나(8.7배) 불매를 검색량 기반 연속형 강도로 바꿔도(9.9배) 약 9~11배이고, 엔저 효과를 가장 크게 잡는 추론에서도 4배 가까이 돼요.
+**한 줄 결론**: 불매운동은 엔화 10% 하락 효과의 약 11배(95% 구간 6~24배) 크기의 충격이었어요. 불매를 검색량 기반 연속형 강도로 바꾸거나(9.9배) 비교국을 8개국으로 늘려도(10.9배) 약 9~11배이고, 엔저 효과를 가장 크게 잡는 추론에서도 4배 가까이 돼요.
 
 | 항목 | 추정치 | 의미 |
 |---|---|---|
@@ -31,7 +31,7 @@
 | 불매운동 효과 (2019.7~2020.2 평균) | **−65%** (95% CI −75 ~ −51%) | 같은 시기 비교국 대비 감소. 가짜 불매 구간 35개의 분포에서 약 13 표준편차 바깥 |
 | 불매운동 정점 (2019.10~12) | −76% | |
 | **불매 효과 ÷ 10% 엔저 효과** | **약 11배** (모의실험 95% CI 6 ~ 24배) | 주 지표. 국가 군집 추론의 가장 불리한 끝에서도 3.9배 |
-| XGBoost 강건성 (FWL 잔차 + rolling origin) | 불매 ÷ 10% 엔저 **8.7배** (부트스트랩 95% 6.6 ~ 19.2배) | 표본 밖 예측은 선형보다 낫지 않음(RMSE 51.7% vs 47.3%, Diebold-Mariano p = 0.36) → 선형으로 충분. 사전 명시한 계산 방식은 트리의 외삽 한계로 4.8배였고, 사후 진단 후 imputation 추정으로 대체(그대로 공개) |
+| 머신러닝 예측 비교 (FWL 잔차 + rolling origin) | 표본 밖 RMSE: 선형 **47.3%** vs XGBoost 51.7% | XGBoost가 더 낫지 않음(Diebold-Mariano p = 0.36) → 일정 탄력성 가정으로 충분. 효과 크기는 불매 달이 환율 잔차 분포의 끝이라 트리가 외삽하지 못해 계산하지 않음 |
 | 불매 스톡 (네이버 검색량 adstock) | δ = 0.85, **반감기 약 4개월**, 불매 ÷ 10% 엔저 **9.9배** | 0/1 더미보다 잘 맞음(AIC −43 vs −19, 불매 기간 잔차 RMSE 0.11 vs 0.26). 검색 관심은 한 달 만에 절반이 됐지만 여행 회피는 수개월 지속. δ = 0.6~0.9에서 8.3 ~ 10.0배 |
 | 비교국 확장 (+ 싱가포르·말레이시아·인도네시아, 8개국) | θ −0.86, 불매 −63%, **10.9배** | 결과 그대로이고 국가 단위 추론이 좋아짐(wild bootstrap p 0.19 → 0.08). 홍콩·마카오·캄보디아는 불매 기간 자체 충격(홍콩 시위)과 코로나 이후 구조적 감소가 달러 강세와 겹쳐 비교국 조건을 어겨 제외 |
 | 불매 기간 다른 권역 이동 (2019.7~2020.1, 자기 추세 대비) | 미국 +2%, 괌 −8%, 호주 −5%, 유럽 −8 ~ −27% | 모두 가짜 구간 범위 안이거나 감소. 추세보다 늘어난 곳을 다 더해도 약 32만 명(일본 감소 344만 명의 10% 미만) |
@@ -76,7 +76,7 @@ ln V_ct = Σ_{k=0}^{10} β_k · ln FX_{c,t−k}  +  γ · 불매_ct
 
 **검정과 진단**: 단위근(ADF/KPSS), 공적분(Engle-Granger), 잔차 자기상관(Ljung-Box), 계절성 F 검정, 미래 환율 위약 검정(선행 효과의 증거 없음, 다만 검정력이 낮음), 가짜 불매 구간 위약 검정, 비교국 오염 보정
 
-**선형 가정 점검 (XGBoost)**: 모형 2의 고정효과를 방문자 수와 설명변수에서 먼저 걷어낸 뒤(Frisch-Waugh-Lovell) 잔차에 XGBoost를 적합해요. 식별은 그대로 두고 함수 형태만 유연하게 하는 방식이에요. 2018.6~2025.6 rolling origin으로 표본 밖 예측을 비교하고, 효과 크기는 반사실 예측으로 계산해요. 설계와 판정 기준은 결과 전에 [`docs/xgb_prereg.md`](docs/xgb_prereg.md)에 적었어요.
+**선형 가정 점검 (머신러닝 예측 비교)**: 모형 2의 고정효과를 방문자 수와 설명변수에서 먼저 걷어낸 뒤(Frisch-Waugh-Lovell) 잔차에 XGBoost를 적합해요. 식별은 그대로 두고 함수 형태만 유연하게 하는 방식이에요. 2018.6~2025.6 rolling origin으로 표본 밖 예측을 비교해요. 효과 크기는 반사실 값이 트리의 학습 범위 밖이라 XGBoost로 계산하지 않아요. 설계와 판정 기준은 결과 전에 [`docs/xgb_prereg.md`](docs/xgb_prereg.md)에 적었어요.
 
 **불매 스톡**: 0/1 불매 더미 대신 검색량을 쌓아 가며 줄어드는 불매 심리 K_t = S_t + δ·K_{t−1}을 넣어요(S: '노재팬'+'일본 불매' 검색량에서 2021~2026 중앙값을 뺀 값, 한 달 시차). δ는 AIC로 고르고, δ에 따른 결과를 곡선으로 함께 보고해요. δ를 불매 한 번에 맞춘 값이라 본 결과는 0/1 더미로 유지해요.
 
@@ -94,8 +94,7 @@ ln V_ct = Σ_{k=0}^{10} β_k · ln FX_{c,t−k}  +  γ · 불매_ct
 | ![](figures/fig1_recovery_by_event_time.png) | ![](figures/fig2_elasticity_comparison.png) |
 | ![](figures/fig3_decomposition.png) | ![](figures/fig4_breakeven.png) |
 | ![](figures/fig5_share_shift.png) | ![](figures/fig6_yen_tiers.png) |
-| ![](figures/fig7_xgb_linearity.png) | ![](figures/fig8_boycott_stock.png) |
-| ![](figures/fig9_comparison_countries.png) | |
+| ![](figures/fig8_boycott_stock.png) | ![](figures/fig9_comparison_countries.png) |
 
 ## 재현 방법
 
@@ -127,7 +126,8 @@ bash run_all.sh          # 약 3분 (XGBoost 부트스트랩 포함)
 │   ├── yen_tiers.py           5. 엔저 폭 구간별 효과
 │   ├── lag_sensitivity.py     부록: 시차 길이 민감도
 │   ├── diagnostics.py         부록: 시계열 진단, 표준오차 민감도 (tsdiag.py 사용)
-│   ├── xgb_robustness.py      6. 선형 가정 점검 (XGBoost, 그림 7)
+│   ├── xgb_robustness.py      6. 선형 가정 점검: XGBoost 표본 밖 예측 비교
+│   ├── spline_check.py        부록: 자연 스플라인 점검 (채택하지 않음)
 │   ├── boycott_stock.py       7. 검색량 불매 스톡 (그림 8)
 │   ├── comparison_expansion.py 8. 비교국 확장, 불매 기간 목적지별 변화 (그림 9)
 │   ├── fetch_ecb_fx.py        ECB 환율 파일 생성 (1회성)
@@ -138,6 +138,7 @@ bash run_all.sh          # 약 3분 (XGBoost 부트스트랩 포함)
     ├── methodology.md         방법론 상세
     ├── strategy.md            국면별 여행사 전략 (결과 해석)
     ├── xgb_prereg.md          XGBoost 점검 사전 명시 (결과 전 작성)
+    ├── spline_prereg.md       자연 스플라인 점검 사전 명시 (부록, 채택하지 않음)
     └── report_flow_explainer.md  보고서 흐름 해설과 검토
 ```
 
@@ -149,7 +150,7 @@ bash run_all.sh          # 약 3분 (XGBoost 부트스트랩 포함)
 - **엔저 5% 초과 구간**은 일본에서만 25개월(2016.1, 2023.9~2025.8) 관측돼 그 시기 일본 고유 요인과 구분되지 않아요. 구간별 효과는 탐색적 분석이에요.
 - **불매 효과의 표준오차**: 처치 단위가 일본 하나라 Driscoll-Kraay 표준오차가 작게 잡히는 경향이 있어요(가짜 구간의 14%가 |z| > 1.96). 대신 가짜 구간 분포와 비교하면 실제 효과는 약 13 표준편차 바깥이에요.
 - **불매 사건이 하나뿐이에요**: 불매 효과, 불매 스톡의 δ(반감기 약 4개월)는 모두 2019년 한 번에서 나온 값이라 다른 이슈에 그대로 통하는지는 검증할 수 없어요.
-- **XGBoost의 사후 수정**: 사전 명시한 반사실 계산은 기준 2를 충족하지 못했고(4.8배), 원인 진단 후 imputation 추정(8.7배)으로 바꿨어요. 결과를 본 뒤의 수정이라 두 값을 모두 공개해요.
+- **XGBoost는 예측 비교에만 써요**: 사전 명시한 효과 크기 기준(기준 2)은 불매 달이 트리의 학습 범위 끝에 있어 믿기 어렵다고 판단해 보고에서 뺐어요. 경위와 계산 결과는 [`docs/xgb_prereg.md`](docs/xgb_prereg.md)와 `results/xgb_robustness.json`에 그대로 남겼어요.
 - **탐색적 선택**: 불매 정점(10~12월), 오염수 구간 2개, 엔저 구간 경계는 결과를 보고 정한 부분이 있어요.
 - 목적지 국가 집계 기준이라 국적, 체류 목적 정의가 나라마다 조금씩 달라요.
 
