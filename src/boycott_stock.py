@@ -105,35 +105,50 @@ plt.rcParams.update({"font.family": family, "axes.unicode_minus": False, "font.s
 _, _, Kn, g_best, _, _ = fit_stock(I_exc, float(best.delta), 1)
 J = load_full().query("country == 'JP'").set_index("t")
 ts = list(range(ym(2019, 4), ym(2020, 2) + 1)); lab = [f"{2015 + t // 12}.{t % 12 + 1}" for t in ts]
-fig, ax = plt.subplots(1, 2, figsize=(11.5, 4.5), gridspec_kw={"width_ratios": [1.2, 1]})
-a = ax[0]; x = np.arange(len(ts))
-a.bar(x, 100 * I_exc.loc[ts] / I_exc.loc[ts].max(), color="#e6dcc8", width=.7, label="불매 검색량 (정점 = 100)")
-a.plot(x, J.loc[ts, "idx_2018"], color="#1f3b57", lw=2.2, marker="o", ms=4, label="방일 한국인 (2018 = 100)")
-a.plot(x, 100 * np.exp(g_best * Kn.loc[ts].fillna(0)), color="#c0392b", lw=1.8, ls="--", label="불매 스톡 모형의 불매 효과")
-a.plot(x, [100 * np.exp(dummy["gamma"]) if t in BOY else 100 for t in ts], color="#7f8c8d", lw=1.4, ls=":",
-       label="0/1 더미 모형의 불매 효과")
-a.set_xticks(x); a.set_xticklabels(lab, rotation=45, fontsize=8.5); a.set_ylim(0, 115)
-a.set_ylabel("지수 (기준 = 100)")
-a.legend(frameon=False, fontsize=8.5, loc="upper right")
-a.text(len(ts) - 1, 9, "코로나\n영향 시작", fontsize=8.5, color="#666", ha="center")
-a.text(-0.02, 1.03, "(a)", transform=a.transAxes, fontsize=11, weight="bold")
-b = ax[1]
-l1, = b.plot(main.delta, main.ratio_boycott_to_yen10, color="#1f3b57", lw=2, marker="o", ms=4,
-             label="불매 ÷ 10% 엔저 (배, 왼쪽 축)")
-b.axhline(dummy["ratio_boycott_to_yen10"], color="#7f8c8d", ls=":", lw=1.2)
-b.text(0.97, dummy["ratio_boycott_to_yen10"] + 0.25, f"0/1 더미 모형 {dummy['ratio_boycott_to_yen10']:.1f}배", fontsize=8.5, color="#555", ha="right")
-b.set_xlabel("월 잔존율 δ"); b.set_ylabel("불매 ÷ 10% 엔저 (배)"); b.set_ylim(0, 15)
-b2 = b.twinx()
-l2, = b2.plot(main.delta, main.aic, color="#c9a227", lw=1.4, ls="--", label="AIC (오른쪽 축, 낮을수록 적합)")
-b2.set_ylabel("AIC", color="#8a6d0b"); b2.axhline(dummy["aic"], color="#c9a227", ls=":", lw=1)
-b2.text(0.9, dummy["aic"] + 3, "0/1 더미 모형 AIC", fontsize=8.5, color="#8a6d0b", ha="right")
-b.axvline(best.delta, color="#c0392b", lw=.8)
-b.text(best.delta - 0.02, 14.6, f"최적 δ = {best.delta}\n(반감기 약 {best.half_life_months:.0f}개월)", fontsize=8.5,
-       color="#c0392b", ha="right", va="top")
-b.text(-0.02, 1.03, "(b)", transform=b.transAxes, fontsize=11, weight="bold")
-b.legend([l1, l2], [l1.get_label(), l2.get_label()], frameon=False, fontsize=8.5, loc="lower left")
-for s in ["top", "right"]:
-    a.spines[s].set_visible(False)
-b.spines["top"].set_visible(False); b2.spines["top"].set_visible(False)
-fig.tight_layout(); fig.savefig(FIGURES / "fig8_boycott_stock.png", dpi=160)
-print("wrote figures/fig8_boycott_stock.png")
+INK, INK2, GRID, MUTED, BLUE, ORANGE = "#0b0b0b", "#52514e", "#e6e5e0", "#a3a29c", "#2a78d6", "#eb6834"
+plt.rcParams.update({"axes.edgecolor": "#c9c8c2", "xtick.color": INK2, "ytick.color": INK2, "axes.labelcolor": INK2,
+                     "figure.facecolor": "#fcfcfb", "axes.facecolor": "#fcfcfb", "savefig.facecolor": "#fcfcfb"})
+
+
+def clean(a):
+    a.grid(axis="y", color=GRID, lw=0.8); a.set_axisbelow(True)
+    for s_ in ["top", "right"]:
+        a.spines[s_].set_visible(False)
+    a.tick_params(length=0)
+
+
+# fig8a: one time axis, two panels (search index on top, visitors and model responses below)
+x = np.arange(len(ts))
+fig, (a1, a2) = plt.subplots(2, 1, figsize=(8.6, 6.0), sharex=True, gridspec_kw={"height_ratios": [1, 1.6]})
+a1.bar(x, 100 * I_exc.loc[ts] / I_exc.loc[ts].max(), color="#e3c9a6", width=.65)
+a1.set_ylabel("불매 검색량\n(정점 = 100)"); a1.set_ylim(0, 110); clean(a1)
+a2.plot(x, J.loc[ts, "idx_2018"], color=INK, lw=2.4, marker="o", ms=4)
+a2.plot(x, 100 * np.exp(g_best * Kn.loc[ts].fillna(0)), color=ORANGE, lw=2, ls="--")
+a2.plot(x, [100 * np.exp(dummy["gamma"]) if t in BOY else 100 for t in ts], color=MUTED, lw=1.6, ls=":")
+a2.text(10.3, J.loc[ts[-1], "idx_2018"], "실제 방일 한국인", color=INK, fontsize=9.5, va="center")
+a2.text(10.3, 100 * np.exp(g_best * Kn.loc[ts[-1]]), "스톡 모형", color=ORANGE, fontsize=9.5, va="center")
+a2.text(10.3, 100 * np.exp(dummy["gamma"]) - 4, "0/1 더미", color=INK2, fontsize=9.5, va="center")
+a2.annotate("코로나 영향 시작", xy=(10, J.loc[ts[-1], "idx_2018"]), xytext=(8.2, 8), fontsize=8.5, color=INK2,
+            arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8))
+a2.set_ylabel("방문자 지수\n(2018년 같은 달 = 100)"); a2.set_ylim(0, 115); clean(a2)
+a2.set_xticks(x); a2.set_xticklabels(lab, fontsize=9)
+a2.set_xlim(-0.6, 12.2)
+fig.tight_layout(); fig.savefig(FIGURES / "fig8a_boycott_stock_time.png", dpi=200); plt.close(fig)
+
+# fig8b: one delta axis, two panels (AIC on top, ratio below)
+fig, (b1, b2) = plt.subplots(2, 1, figsize=(8.6, 5.6), sharex=True)
+b1.plot(main.delta, main.aic, color=INK2, lw=2, marker="o", ms=4)
+b1.axhline(dummy["aic"], color=MUTED, ls=":", lw=1.2)
+b1.text(0.0, dummy["aic"] + 4, f"0/1 더미 AIC {dummy['aic']:.0f}", fontsize=9, color=INK2)
+b1.set_ylabel("AIC (낮을수록 적합)"); clean(b1)
+b2.plot(main.delta, main.ratio_boycott_to_yen10, color=INK, lw=2, marker="o", ms=4)
+b2.axhline(dummy["ratio_boycott_to_yen10"], color=MUTED, ls=":", lw=1.2)
+b2.text(0.0, dummy["ratio_boycott_to_yen10"] + 0.4, f"0/1 더미 {dummy['ratio_boycott_to_yen10']:.1f}배", fontsize=9, color=INK2)
+b2.set_ylabel("불매 ÷ 10% 엔저 (배)"); b2.set_ylim(0, 13); clean(b2)
+for b_ in (b1, b2):
+    b_.axvline(best.delta, color=ORANGE, lw=1)
+b1.text(best.delta - 0.015, b1.get_ylim()[1] * 0.92 if b1.get_ylim()[1] > 0 else 60,
+        f"AIC 최소 δ = {best.delta}", fontsize=9, color=ORANGE, ha="right", va="top")
+b2.set_xlabel("월 잔존율 δ")
+fig.tight_layout(); fig.savefig(FIGURES / "fig8b_boycott_stock_delta.png", dpi=200); plt.close(fig)
+print("wrote figures/fig8a_boycott_stock_time.png, fig8b_boycott_stock_delta.png")

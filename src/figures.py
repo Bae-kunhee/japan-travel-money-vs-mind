@@ -53,7 +53,7 @@ for c in ["VN", "TH", "PH", "TW"]:
     ax.plot(d.event, d.idx_s, color=MUTED, lw=1.6, zorder=2)
     ax.text(d.event.iloc[-1] + 0.6, d.idx_s.iloc[-1], NAME_KO[c], color=INK2, va="center", fontsize=9.5)
 d = E[E.country == "JP"]
-ax.plot(d.event, d.idx_s, color=BLUE, lw=2.4, zorder=3)
+ax.plot(d.event, d.idx_s, color=INK, lw=2.4, zorder=3)
 ax.text(d.event.iloc[-1] + 0.6, d.idx_s.iloc[-1], "일본", color=INK, va="center", fontsize=10.5, weight="bold")
 ax.axhline(100, color=INK2, lw=0.9, ls=(0, (3, 3)), zorder=1)
 ax.text(49.5, 103.5, "2018년과 같은 수준", color=INK2, fontsize=9, ha="right")
@@ -80,7 +80,7 @@ ys = np.arange(len(rows))[::-1].astype(float)
 ys[:3] += 0.6
 for y, (lab, th, se, kind) in zip(ys, rows):
     lo, hi = pct10(th + 1.96 * se), pct10(th - 1.96 * se)
-    col = {"main1": ORANGE, "main2": BLUE, "alt": INK2, "rob": MUTED}[kind]
+    col = {"main1": INK, "main2": BLUE, "alt": INK2, "rob": MUTED}[kind]
     ax.plot([lo, hi], [y, y], color=col, lw=2 if kind != "rob" else 1.6, solid_capstyle="round")
     ax.scatter([pct10(th)], [y], s=58 if kind != "rob" else 34, color=col, zorder=3, edgecolor="#fcfcfb", lw=1.5)
     ax.text(hi + 1.2, y, f"{pct10(th):+.0f}%", va="center", fontsize=9.5, color=INK if kind != "rob" else INK2)
@@ -114,7 +114,7 @@ ax.bar(3, total, color=INK2, width=0.62)
 ax.text(3, total + 1.0, f"{total:+.1f}", ha="center", va="bottom", fontsize=10.5, color=INK, weight="bold")
 ax.axhline(0, color=INK2, lw=0.9)
 ax.set_xticks(range(4)); ax.set_xticklabels([s[0] for s in steps] + ["실제 증가\n(2018 → 2024~25)"], fontsize=9.5)
-ax.set_ylabel("방문자 변화 (로그 %)"); ax.set_ylim(-10, 30)
+ax.set_ylabel("100 × 로그 변화"); ax.set_ylim(-10, 30)
 style(ax)
 ax.text(1, common + fx / 2, f"증가분의\n약 {round(100 * fx / total, -1):.0f}%", ha="center", va="center", fontsize=10, color="white", weight="bold")
 fig.subplots_adjust(top=0.97, bottom=0.2, left=0.09, right=0.97)
@@ -137,7 +137,7 @@ for lab, g, be, col in [("불매 평균", MV["main"]["boycott"], MV["main"]["bre
     ax.scatter([be], [y], s=60, color=col, zorder=4, edgecolor="#fcfcfb", lw=1.5)
     ax.text(be + 1.2, 8 if col == ORANGE else 22, f"{be:.0f}%", color=col, fontsize=10.5, weight="bold")
 ax.set_xlim(0, 90); ax.set_ylim(0, 200)
-ax.set_xlabel("엔화 하락 폭 (%)"); ax.set_ylabel("엔저의 수요 증가 (로그 %)")
+ax.set_xlabel("엔화 하락 폭 (%)"); ax.set_ylabel("엔저의 수요 증가 (100 × 로그 변화)")
 style(ax)
 ax.annotate("엔저 효과 (띠 = 95% 구간)", xy=(60, 100 * th * np.log(0.4)), xytext=(36, 118), color=BLUE, fontsize=9.5,
             arrowprops=dict(arrowstyle="-", color=BLUE, lw=0.8))
@@ -147,7 +147,7 @@ fig.savefig(FIGURES / "fig4_breakeven.png", dpi=200); plt.close(fig)
 # ------------------------------------------------------------------ 5. share shift 2019
 o = SS[SS.v18H2 > 100000].sort_values("did")
 fig, ax = plt.subplots(figsize=(8.6, 5.4))
-cols = [ORANGE if dd == "일본" else (MUTED if v < 0 else BLUE) for dd, v in zip(o.dest, o.did)]
+cols = [ORANGE if dd == "일본" else (MUTED if v < 0 else INK2) for dd, v in zip(o.dest, o.did)]
 ax.barh(o.dest, o.did, color=cols, height=0.62)
 for y, v in enumerate(o.did):
     ax.text(v + (0.15 if v >= 0 else -0.15), y, f"{v:+.1f}%p", va="center", ha="left" if v >= 0 else "right",

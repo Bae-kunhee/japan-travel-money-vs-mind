@@ -238,13 +238,12 @@ plt.rcParams.update({"font.family": family, "axes.unicode_minus": False, "font.s
                      "figure.facecolor": "#fcfcfb", "axes.facecolor": "#fcfcfb", "savefig.facecolor": "#fcfcfb"})
 INK2, GRID, MUTED, BLUE, ORANGE = "#52514e", "#e6e5e0", "#a3a29c", "#2a78d6", "#eb6834"
 
-fig, ax = plt.subplots(1, 2, figsize=(12.5, 5.2), gridspec_kw={"width_ratios": [1, 1.25]})
-a = ax[0]
+fig, a = plt.subplots(figsize=(8.6, 5.0))
 labs = ["5개국 (본 분석)", "8개국\n+싱가포르·말레이시아\n·인도네시아", "9개국\n+위 3국·캄보디아", "10개국\n+위 3국·홍콩·마카오", "11개국\n(모두)"]
 y = np.arange(len(R))[::-1]
 a.errorbar(R.theta, y + 0.12, xerr=1.96 * R.theta_se_dk, fmt="o", color=BLUE, ms=6, capsize=0, lw=1.6,
            label="기본")
-a.errorbar(R.theta_postFE, y - 0.12, xerr=1.96 * R.theta_postFE_se, fmt="s", color=ORANGE, ms=5.5, capsize=0,
+a.errorbar(R.theta_postFE, y - 0.12, xerr=1.96 * R.theta_postFE_se, fmt="s", color=INK2, ms=5.5, capsize=0,
            lw=1.6, mfc="white", label="+ 나라별 코로나 이후 수준 통제")
 a.axvline(0, color=MUTED, lw=1)
 for yy, (_, r) in zip(y, R.iterrows()):
@@ -255,16 +254,20 @@ a.set_ylim(-0.6, len(R) + 0.5); a.set_xlim(-2.2, 1.9)
 a.set_yticks(y); a.set_yticklabels(labs, fontsize=9)
 a.set_xlabel("누적 환율 탄력성 θ")
 a.text(-2.15, -0.5, "← 엔저에 더 민감", fontsize=8.5, color=MUTED, va="center")
-a.text(-0.07, 1.02, "(a)", transform=a.transAxes, fontsize=11, weight="bold")
+
 a.grid(axis="x", color=GRID); a.set_axisbelow(True)
 for s in ["top", "right", "left"]:
     a.spines[s].set_visible(False)
 a.legend(frameon=False, fontsize=8.5, loc="upper left", ncol=2)
 
-b = ax[1]
+fig.tight_layout()
+fig.savefig(FIGURES / "fig9a_comparison_theta.png", dpi=200)
+plt.close(fig)
+
+fig, b = plt.subplots(figsize=(8.6, 6.2))
 H = G[~G.region.isin(["전체 출국자", "기타"])].sort_values("gap_pct")
 H = H[H.destination != "슬로베니아"]
-col = [ORANGE if d == "일본" else ("#c0392b" if d in ("홍콩", "마카오") else BLUE) for d in H.destination]
+col = [ORANGE if d == "일본" else ("#8c2d19" if d in ("홍콩", "마카오") else INK2) for d in H.destination]
 yy = np.arange(len(H))
 b.barh(yy, 1.96 * H.placebo_sd_pct * 2, left=-1.96 * H.placebo_sd_pct, color="#ecebe6", height=0.75,
        label="우연 범위 (가짜 구간 기준)")
@@ -276,14 +279,15 @@ for i, v in zip(yy, H.gap_pct):
            ha="left" if v >= 0 else "right", fontsize=8, color=INK2)
 for i, d in zip(yy, H.destination):
     if d in ("홍콩", "마카오"):
-        b.text(2, i, "시위 영향", va="center", fontsize=8.5, color="#c0392b")
+        b.text(2, i, "시위 영향", va="center", fontsize=8.5, color="#8c2d19")
 b.set_xlim(-80, 32)
 b.set_xlabel("방문객 변화 (%, 자기 추세 대비)")
-b.text(-0.02, 1.02, "(b)", transform=b.transAxes, fontsize=11, weight="bold")
+
 b.grid(axis="x", color=GRID); b.set_axisbelow(True)
 for s in ["top", "right", "left"]:
     b.spines[s].set_visible(False)
 b.legend(frameon=False, fontsize=8.5, loc="upper left")
 fig.tight_layout()
-fig.savefig(FIGURES / "fig9_comparison_countries.png", dpi=160)
-print("wrote figures/fig9_comparison_countries.png")
+fig.savefig(FIGURES / "fig9b_boycott_window_destinations.png", dpi=200)
+plt.close(fig)
+print("wrote figures/fig9a_comparison_theta.png, fig9b_boycott_window_destinations.png")

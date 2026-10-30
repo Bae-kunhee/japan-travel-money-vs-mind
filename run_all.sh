@@ -12,5 +12,7 @@ python3 diagnostics.py      # results/diagnostics_appendix.md (appendix: time-se
 python3 figures.py          # figures/fig1..fig6.png
 python3 xgb_robustness.py   # results/xgb_robustness.json  (XGBoost out-of-sample comparison; ~2 min)
 python3 spline_check.py     # results/spline_check.json    (appendix: natural spline check, not adopted)
-python3 boycott_stock.py    # results/boycott_stock.json   (search-volume boycott stock, fig8)
-python3 comparison_expansion.py  # results/comparison_expansion.csv (more comparison countries, boycott window by destination, fig9)
+python3 boycott_stock.py    # results/boycott_stock.json   (search-volume boycott stock, fig8a/8b)
+python3 comparison_expansion.py  # results/comparison_expansion.csv (more comparison countries, boycott window by destination, fig9a/9b)
+python3 review_checks.py    # results/review_checks.json   (sample table, D test, event study, Japan-specific theta, drop 2020-01..02)
+python3 review_figures.py   # figures/fig10..fig12.png     (event study, Japan vs comparators, both effects)
